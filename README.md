@@ -4,8 +4,8 @@ Psync is an open-source web application for practising mental skills inspired by
 
 This repository contains an early public preview focused on two practices:
 
-- **Imagery** â€” create, practise, reflect on and develop a vivid mental rehearsal.
-- **Inner Voice** â€” notice self-talk and prepare a fair, realistic and helpful response.
+- **Imagery** — create, practise, reflect on and develop a vivid mental rehearsal.
+- **Inner Voice** — notice self-talk and prepare a fair, realistic and helpful response.
 
 Psync is an educational tool. It does not diagnose conditions, provide therapy or replace professional mental health care.
 
@@ -71,4 +71,3 @@ For security concerns, follow [SECURITY.md](SECURITY.md).
 ## License
 
 The source code is available under the [MIT License](LICENSE).
-
