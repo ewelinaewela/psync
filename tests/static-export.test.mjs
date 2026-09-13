@@ -41,6 +41,13 @@ test("keeps private protocols and generated output out of Git", async () => {
 test("prepares GitHub Pages static hosting markers", async () => {
   await access(new URL(".nojekyll", outputRoot));
   await access(new URL("404.html", outputRoot));
+  await assert.rejects(access(new URL(".vite/", outputRoot)));
+
+  const workflow = await readFile(
+    new URL(".github/workflows/deploy-pages.yml", projectRoot),
+    "utf8",
+  );
+  assert.match(workflow, /^\s+include-hidden-files: true$/m);
 });
 
 test("contains no starter preview or data-service references", async () => {
