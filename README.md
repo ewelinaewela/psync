@@ -2,6 +2,8 @@
 
 Psync is an open-source web application for practising mental skills inspired by sport psychology. It turns structured exercises into short, guided experiences that can support preparation, focus and constructive self-talk.
 
+Try the public preview at [ewelinaewela.github.io/psync](https://ewelinaewela.github.io/psync/).
+
 This repository contains an early public preview focused on two practices:
 
 - **Imagery** — create, practise, reflect on and develop a vivid mental rehearsal.
@@ -57,7 +59,7 @@ The static site is generated in `dist/client/`. The project can be published on 
 app/                    Application routes, components and styles
 public/                 Psync icons and public assets
 tests/                  Static export tests
-.github/workflows/      Manual GitHub Pages deployment
+.github/workflows/      Automated GitHub Pages deployment
 ```
 
 The original research and working protocol documents are private source materials and are intentionally excluded from this repository.
