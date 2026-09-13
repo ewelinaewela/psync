@@ -30,6 +30,12 @@ test("uses the configured project path for navigation and public assets", async 
   assert.match(home, new RegExp(`src=["']${basePath}/imagery\\.svg["']`));
   assert.match(home, new RegExp(`href=["']${basePath}/privacy/?["']`));
   assert.match(home, new RegExp(`(?:src|href)=["']${basePath}/_next/static/`));
+
+  await access(new URL("_next/static/", outputRoot));
+  if (basePath) {
+    const scopedStaticPath = `${basePath.replace(/^\//, "")}/_next/`;
+    await assert.rejects(access(new URL(scopedStaticPath, outputRoot)));
+  }
 });
 
 test("keeps private protocols and generated output out of Git", async () => {
