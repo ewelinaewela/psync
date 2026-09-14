@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
-type ExerciseKind = "imagery" | "inner-voice";
+type ExerciseKind = "imagery" | "inner-voice" | "anxiety-balance" | "anxiety-pressure";
 type FieldType = "text" | "textarea" | "choice";
 
 type Field = {
@@ -154,10 +154,90 @@ const exercises: Record<ExerciseKind, Exercise> = {
       },
     ],
   },
+  "anxiety-balance": {
+    title: "Demands & resources",
+    duration: "5–8 min",
+    intro: "Notice what the situation asks of you and what you can draw on.",
+    explanationTitle: "What are demands and resources?",
+    explanation: [
+      "Anxiety can be a normal response to stress. A performance situation may bring demands: things that ask for your time, attention or energy.",
+      "Resources are the support, skills, preparation and choices available to you. This reflection is not a test or a measure of anxiety; there is no correct number of items on either side.",
+      "Choose a manageable, everyday performance situation. You can leave any question or the whole exercise whenever you wish.",
+    ],
+    steps: [
+      {
+        eyebrow: "Demands",
+        title: "What is being asked of you?",
+        guidance: "Think of one upcoming situation and name the pressures you notice. Include only what feels useful to reflect on.",
+        fields: [
+          { id: "situation", label: "What situation are you thinking about?", placeholder: "e.g. a presentation, match or important conversation", required: true },
+          { id: "demands", label: "What demands do you notice?", placeholder: "e.g. time pressure, expectations from others, uncertainty", type: "textarea", required: true },
+        ],
+      },
+      {
+        eyebrow: "Resources",
+        title: "What can support you?",
+        guidance: "Resources can be internal or external. Think about skills, preparation, people, rest, information or help you could ask for.",
+        fields: [
+          { id: "resources", label: "Which resources do you already have?", placeholder: "e.g. preparation, experience, supportive friends or a coach", type: "textarea", required: true },
+          { id: "support", label: "Is there one resource you could add?", placeholder: "e.g. ask for feedback, make time to practise", type: "textarea" },
+        ],
+      },
+      {
+        eyebrow: "Next step",
+        title: "Choose one helpful action",
+        guidance: "You do not have to solve every demand today. Choose a small, realistic step that you control.",
+        fields: [
+          { id: "action", label: "What will you do next?", placeholder: "e.g. practise the opening for five minutes", type: "textarea", required: true },
+          { id: "when", label: "When might you do it?", placeholder: "e.g. tomorrow afternoon" },
+        ],
+      },
+    ],
+  },
+  "anxiety-pressure": {
+    title: "Practise under pressure",
+    duration: "5–8 min",
+    intro: "Plan a small, manageable rehearsal for an upcoming challenge.",
+    explanationTitle: "Why practise a pressure situation?",
+    explanation: [
+      "Preparing for a demanding moment can include practising the task in conditions that feel a little more like the real situation.",
+      "This is a planning exercise for everyday performance, not treatment for an anxiety disorder. Start with an ordinary, manageable scenario; do not create unsafe conditions or force yourself through distress.",
+      "The added-pressure step is optional. You can practise without it, stop at any time, or seek support from a qualified professional if anxiety is disrupting daily life.",
+    ],
+    steps: [
+      {
+        eyebrow: "Name it",
+        title: "Choose a pressure situation",
+        guidance: "Pick a specific situation that matters to you and feels manageable to practise.",
+        fields: [
+          { id: "situation", label: "What situation would you like to prepare for?", placeholder: "e.g. speaking at the next team meeting", type: "textarea", required: true },
+        ],
+      },
+      {
+        eyebrow: "Rehearse",
+        title: "How could you practise it?",
+        guidance: "Choose a small version of the real task that you can repeat safely.",
+        fields: [
+          { id: "practice", label: "Describe one simple rehearsal", placeholder: "e.g. speak through the first minute aloud at home", type: "textarea", required: true },
+          { id: "when", label: "When might you try it?", placeholder: "e.g. before Thursday's meeting" },
+        ],
+      },
+      {
+        eyebrow: "Adjust",
+        title: "Would a little pressure help?",
+        guidance: "Only if the basic rehearsal feels manageable, you may add a small, safe element that resembles the real situation. This step is optional.",
+        fields: [
+          { id: "addedPressure", label: "What gentle, safe change could you try?", placeholder: "e.g. practise with one trusted friend listening", type: "textarea" },
+          { id: "boundary", label: "What will tell you to pause or stop?", placeholder: "e.g. I feel overwhelmed or need a break", type: "textarea" },
+        ],
+      },
+    ],
+  },
 };
 
 export function GuidedExercise({ kind }: { kind: ExerciseKind }) {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const returnPath = kind.startsWith("anxiety-") ? `${basePath}/anxiety` : `${basePath}/`;
   const exercise = exercises[kind];
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
@@ -194,6 +274,32 @@ export function GuidedExercise({ kind }: { kind: ExerciseKind }) {
           `${answers.people ? `The relevant people around me are ${answers.people}.` : ""} I keep the image specific, meaningful and focused on what I can control.`,
         ].filter(Boolean),
         tip: `Practise this image for 30 seconds${answers.practiceWhen ? ` ${answers.practiceWhen}` : ""}${answers.practiceWhere ? `, ${answers.practiceWhere}` : ""}. Your last image felt: ${answers.vividness || "not rated"}.`,
+      };
+    }
+
+    if (kind === "anxiety-balance") {
+      return {
+        label: "Your reflection",
+        title: "One step at a time",
+        paragraphs: [
+          `For ${answers.situation || "this situation"}, I noticed these demands: ${answers.demands || "not recorded"}.`,
+          `Resources I can draw on: ${answers.resources || "not recorded"}.${answers.support ? ` I could also add: ${answers.support}.` : ""}`,
+          `My next useful step is: ${answers.action || "not recorded"}.`,
+        ],
+        tip: `Keep the step manageable${answers.when ? ` and consider doing it ${answers.when}` : ""}. This reflection is not a score or diagnosis.`,
+      };
+    }
+
+    if (kind === "anxiety-pressure") {
+      return {
+        label: "Your practice plan",
+        title: "Start small",
+        paragraphs: [
+          `I want to prepare for: ${answers.situation || "a manageable situation"}.`,
+          `A simple rehearsal is: ${answers.practice || "not recorded"}.`,
+          answers.addedPressure ? `Only if that feels manageable, I could try: ${answers.addedPressure}.` : "I can keep practising the simple version without adding pressure.",
+        ],
+        tip: `Try this at a pace that feels safe${answers.when ? `, perhaps ${answers.when}` : ""}.${answers.boundary ? ` Pause or stop if: ${answers.boundary}.` : " You can pause or stop at any time."}`,
       };
     }
 
@@ -252,11 +358,11 @@ export function GuidedExercise({ kind }: { kind: ExerciseKind }) {
   return (
     <main className="exercise-page">
       <header className="exercise-header">
-        <Link className="back-link" href={`${basePath}/`} aria-label="Back to home"><span aria-hidden="true">←</span> Home</Link>
+        <Link className="back-link" href={returnPath} aria-label={kind.startsWith("anxiety-") ? "Back to anxiety practices" : "Back to home"}><span aria-hidden="true">←</span> {kind.startsWith("anxiety-") ? "Practices" : "Home"}</Link>
         <div className="exercise-identity">
           {/* Local SVG from the original Psync design system. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`${basePath}${kind === "imagery" ? "/imagery.svg" : "/inner-voice.svg"}`} alt="" width="42" height="42" />
+          <img src={`${basePath}${kind === "imagery" ? "/imagery.svg" : kind === "inner-voice" ? "/inner-voice.svg" : "/anxiety.svg"}`} alt="" width="42" height="42" />
           <div><strong>{exercise.title}</strong><span>{exercise.duration}</span></div>
         </div>
         <span className="local-note">Not saved</span>
@@ -282,7 +388,7 @@ export function GuidedExercise({ kind }: { kind: ExerciseKind }) {
               <h1>{exercise.explanationTitle}</h1>
               <div className="intro-copy">{exercise.explanation.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
               <div className="protocol-note"><strong>Take your time</strong><p>Your answers are not saved. You can pause or leave the exercise whenever you want.</p></div>
-              <div className="exercise-actions"><Link className="text-link" href={`${basePath}/`}>Not now</Link><button className="button-primary" type="button" onClick={() => setStarted(true)}>Begin exercise <span aria-hidden="true">→</span></button></div>
+              <div className="exercise-actions"><Link className="text-link" href={returnPath}>Not now</Link><button className="button-primary" type="button" onClick={() => setStarted(true)}>Begin exercise <span aria-hidden="true">→</span></button></div>
             </div>
           ) : !complete && current ? (
             <>
@@ -333,7 +439,7 @@ export function GuidedExercise({ kind }: { kind: ExerciseKind }) {
               <div className="result-script">{result.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
               <div className="practice-tip"><strong>Train the skill</strong><p>{result.tip}</p></div>
               <p className="privacy-reminder">Your answers disappear when you close or refresh this page.</p>
-              <div className="exercise-actions result-actions"><button className="button-secondary" type="button" onClick={() => setStep(exercise.steps.length - 1)}>Edit answers</button><button className="button-primary" type="button" onClick={restart}>Start again</button><Link className="text-link" href={`${basePath}/`}>Finish</Link></div>
+              <div className="exercise-actions result-actions"><button className="button-secondary" type="button" onClick={() => setStep(exercise.steps.length - 1)}>Edit answers</button><button className="button-primary" type="button" onClick={restart}>Start again</button><Link className="text-link" href={returnPath}>Finish</Link></div>
             </div>
           )}
         </section>

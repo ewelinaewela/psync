@@ -4,10 +4,11 @@ Psync is an open-source web application for practising mental skills inspired by
 
 Try the public preview at [ewelinaewela.github.io/psync](https://ewelinaewela.github.io/psync/).
 
-This repository contains an early public preview focused on two practices:
+This repository contains an early public preview focused on three areas:
 
 - **Imagery** — create, practise, reflect on and develop a vivid mental rehearsal.
 - **Inner Voice** — notice self-talk and prepare a fair, realistic and helpful response.
+- **Anxiety & pressure** — reflect on demands and resources, or plan a small, manageable performance rehearsal. This is not an anxiety test or treatment.
 
 Psync is an educational tool. It does not diagnose conditions, provide therapy or replace professional mental health care.
 

@@ -21,6 +21,14 @@ const practices = [
     accent: "inner-voice",
     href: `${basePath}/inner-voice`,
   },
+  {
+    title: "Anxiety & pressure",
+    description: "Notice what the moment asks of you and prepare in manageable steps.",
+    duration: "Two practices",
+    icon: `${basePath}/anxiety.svg`,
+    accent: "anxiety",
+    href: `${basePath}/anxiety`,
+  },
 ];
 
 export default function Home() {

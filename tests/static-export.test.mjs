@@ -10,6 +10,9 @@ const routes = [
   ["index.html", "Train your mind"],
   ["imagery.html", "Why is imagery useful?"],
   ["inner-voice.html", "What is self-talk?"],
+  ["anxiety.html", "Make room for the challenge"],
+  ["anxiety/balance.html", "What are demands and resources?"],
+  ["anxiety/pressure.html", "Why practise a pressure situation?"],
   ["about.html", "Mental skills should be easier to practise"],
   ["privacy.html", "Your reflections remain yours"],
   ["safety.html", "Psync is practice"],
@@ -29,7 +32,14 @@ test("uses the configured project path for navigation and public assets", async 
   assert.match(home, new RegExp(`href=["']${basePath}/imagery/?["']`));
   assert.match(home, new RegExp(`src=["']${basePath}/imagery\\.svg["']`));
   assert.match(home, new RegExp(`href=["']${basePath}/privacy/?["']`));
+  assert.match(home, new RegExp(`href=["']${basePath}/anxiety/?["']`));
+  assert.match(home, new RegExp(`src=["']${basePath}/anxiety\\.svg["']`));
   assert.match(home, new RegExp(`(?:src|href)=["']${basePath}/_next/static/`));
+
+  const anxiety = await readFile(new URL("anxiety.html", outputRoot), "utf8");
+  assert.match(anxiety, new RegExp(`href=["']${basePath}/anxiety/balance/?["']`));
+  assert.match(anxiety, new RegExp(`href=["']${basePath}/anxiety/pressure/?["']`));
+  assert.doesNotMatch(anxiety, /check your anxiety level|check your stats/i);
 
   await access(new URL("_next/static/", outputRoot));
   if (basePath) {
